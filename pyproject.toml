@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ci-test"
+description = "Test repo for CI github actions."
+readme = "README.md"
+authors = [{name = "glenn20", email = "6965319+glenn20@users.noreply.github.com"}]
+urls = {Homepage = "https://github.com/glenn20/ci-test"}
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "rich>=10.12.0",
+    "more-itertools>=8.8.0",
+]
+dynamic = ["version"]
+
+[project.scripts]
+hello = "ci_test:hello"
+
+[tool.hatch]
+build.targets.wheel.packages = ["src/ci_test"]
+build.hooks.vcs.version-file = "src/ci_test/_version.py"
+version.source = "vcs"  # Get the version from git, eg: 0.0.6.dev0+g1234567
+# Don't include the local component in the version number:
+# - so we can publish to test-pypi without bumping the version tags.
+version.raw-options.local_scheme = "no-local-version"
+
+[tool.mypy]
+python_version = "3.9"
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+exclude = ["tests"]
+mypy_path = "typings"
+
+[tool.ruff]
+exclude = ["_version.py"]
+lint.extend-select = ["I"]  # Enable ruffs isort rules (for compat with vscode ruff)
