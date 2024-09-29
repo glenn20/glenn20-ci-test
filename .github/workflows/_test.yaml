@@ -1,0 +1,29 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version'
+        default: '3.12'
+        type: string
+        required: false
+      os:
+        description: 'Operating system'
+        default: 'ubuntu-latest'
+        required: false
+        type: string
+
+jobs:
+  tests:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout and setup python environment
+        uses: ./.github/setup
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: pytest
+        run: uv run --no-sources pytest

@@ -1,0 +1,29 @@
+name: Publish and Release
+
+on:
+  push:
+    tags: ["v*"]  # Publish on tags matching "v*", eg. "v1.0.0"
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests
+    uses: ./.github/workflows/ci-tests.yaml
+
+  publish-pypi:
+    name: Publish to pypi
+    uses: ./.github/workflows/_publish.yaml
+    needs: tests
+    with:
+      package-name: ${{ needs.tests.outputs.package-name }}
+      pypi: test.pypi
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+
+  github-release:
+    name: Create GitHub release
+    uses: ./.github/workflows/_release.yaml
+    needs: publish-pypi
+    permissions:
+      contents: write  # IMPORTANT: mandatory for trusted publishing
+      id-token: write  # IMPORTANT: mandatory for trusted publishing

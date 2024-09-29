@@ -1,6 +1,7 @@
 /requirements.txt
 /.python-version
 _version.py
+/.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

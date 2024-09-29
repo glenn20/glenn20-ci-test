@@ -1,0 +1,43 @@
+name: Test and Build
+
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      package-name:
+        description: 'Name of the package'
+        value: ${{ jobs.build.outputs.package-name }}
+
+jobs:
+  check:
+    name: Code check
+    uses: ./.github/workflows/_check.yaml
+
+  test:
+    name: Pytest py${{ matrix.python-version }}-${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.12"]
+    uses: ./.github/workflows/_test.yaml
+    with:
+      python-version: ${{ matrix.python-version }}
+      os: ${{ matrix.os }}
+
+  build:  # Only build on main branch
+    name: Build package
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    uses: ./.github/workflows/_build.yaml
+
+  publish-test:
+    name: Publish to test.pypi
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    uses: ./.github/workflows/_publish.yaml
+    needs: build
+    with:
+      package-name: ${{ needs.build.outputs.package-name }}
+      pypi: test.pypi
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing

@@ -3,56 +3,59 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ci-test"
+name = "glenn20-ci-test"
 description = "Test repo for CI github actions."
 readme = "README.md"
 authors = [{name = "glenn20", email = "6965319+glenn20@users.noreply.github.com"}]
-urls = {Homepage = "https://github.com/glenn20/ci-test"}
+urls = {Homepage = "https://github.com/glenn20/glenn20-ci-test"}
 license = {text = "MIT"}
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 dependencies = [
-    "rich>=10.12.0",
-    "more-itertools>=8.8.0",
+    "rich>=10.12.0",  # For pretty printing: rich.print()
 ]
 dynamic = ["version"]
 
 [project.scripts]
-hello = "ci_test:hello"
+hello = "glenn20_ci_test:hello"
 
 [tool.hatch]
-build.targets.wheel.packages = ["src/ci_test"]
-build.hooks.vcs.version-file = "src/ci_test/_version.py"
+build.targets.wheel.packages = ["src/glenn20_ci_test"]
+build.hooks.vcs.version-file = "src/glenn20_ci_test/_version.py"
 version.source = "vcs"  # Get the version from git, eg: 0.0.6.dev0+g1234567
-# Don't include the local component in the version number:
-# - so we can publish to test-pypi without bumping the version tags.
 version.raw-options.local_scheme = "no-local-version"
 
 [tool.uv]
 dev-dependencies = [
-  # For running tests: pytest, pyyaml, requests, tox
-  "pytest>=8.3.2",
-  "pyyaml>=6.0.2",
-  "requests>=2.32.3",
-  "tox>=4.0.0",
-  # For code type checks: uv run mypy --no-sources mypy src
-  "mypy>=0.910",
-  # For linting: uv run --no-sources ruff format --check src
-  "ruff>=0.6.7",
-  # For publishing locally: uv publish --keyring-provider=subprocess --username=__token__
-  "keyring>=25",  # For uv publish --keyring-provider=subprocess
-  # Used by .git/hooks/post-{commit,checkout} to update _version.py:
-  #   uv run --frozen hatch build --hooks-only
-  "hatch>=1.12.0",
+    "pytest>=8.3.2",  # For running tests: pytest, tox
+    "pytest-cov>=3.0.0",
+    "tox>=4.21",
+    "tox-uv>=0.3.0",  # uv support for tox
+    "mypy>=0.910",  # For code type checks: uv run mypy src
+    "ruff>=0.6.7",  # For linting: uv run ruff format --check src
+    "keyring>=25",  # For uv publish --keyring-provider=subprocess
+    "hatchling>=1.12.0",  # Used for building package
+    "hatch-vcs>=0.3.0",  # Used for building and updating _version.py
 ]
 
 [tool.mypy]
+files = ["src", "tests"]
 python_version = "3.9"
 disallow_untyped_defs = true
 warn_return_any = true
 warn_unused_ignores = true
-exclude = ["tests"]
 mypy_path = "typings"
 
 [tool.ruff]
 exclude = ["_version.py"]
 lint.extend-select = ["I"]  # Enable ruffs isort rules (for compat with vscode ruff)
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+addopts = ["--cov"]
+
+[tool.coverage]
+run.source = ["src"]
+run.omit = ["_version.py"]
+report.skip_covered = true
+append = true
