@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.8", "3.12"]
+        python-version: ${{ fromJson('["3.8", "3.12"]') }}
     uses: ./.github/workflows/_test.yaml
     with:
       python-version: ${{ matrix.python-version }}
