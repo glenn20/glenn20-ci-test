@@ -5,16 +5,33 @@ on:
     inputs:
       python-version:
         description: 'Python version'
-        default: '["3.12"]'
+        default: '["3.8", "3.12"]'
         type: string
         required: false
       os:
         description: 'Operating system'
-        default: '["ubuntu-latest"]'
+        default: '["ubuntu-latest", "windows-latest", "macos-latest"]'
         required: false
         type: string
 
 jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout and setup python environment
+        uses: ./.github/setup
+
+      - name: mypy
+        run:   uv run --no-sources mypy src
+
+      - name: lint
+        run:   uv run --no-sources ruff check --output-format=github src
+
+      - name: format
+        run:   uv run --no-sources ruff format --check src
+
   tests:
     strategy:
       matrix:

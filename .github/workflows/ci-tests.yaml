@@ -11,10 +11,6 @@ on:
         value: ${{ jobs.build.outputs.package-name }}
 
 jobs:
-  check:
-    name: Code check
-    uses: ./.github/workflows/_check.yaml
-
   test:
     name: Tests
     uses: ./.github/workflows/_test.yaml
