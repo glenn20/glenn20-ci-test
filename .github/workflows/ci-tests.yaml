@@ -5,6 +5,17 @@ on:
     branches: [main, dev]
   workflow_dispatch:
   workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version'
+        default: '["3.8", "3.12"]'
+        type: string
+        required: false
+      os:
+        description: 'Operating system'
+        default: '["ubuntu-latest", "windows-latest"]'
+        required: false
+        type: string
     outputs:
       package-name:
         description: 'Name of the package'
@@ -19,8 +30,8 @@ jobs:
     name: Pytest py${{ matrix.python-version }}-${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ${{ fromJson('["3.8", "3.12"]') }}
+        os: ${{ fromJson(inputs.os) }}
+        python-version: ${{ fromJson(inputs.python-version) }}
     uses: ./.github/workflows/_test.yaml
     with:
       python-version: ${{ matrix.python-version }}
