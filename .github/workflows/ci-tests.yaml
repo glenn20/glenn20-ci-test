@@ -17,3 +17,5 @@ jobs:
     with:
       os: '["ubuntu-latest", "windows-latest"]'
       python-version: '["3.8", "3.12"]'
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
