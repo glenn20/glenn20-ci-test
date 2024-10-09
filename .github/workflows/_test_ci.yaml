@@ -38,7 +38,7 @@ jobs:
   publish-test:
     name: Publish to test.pypi
     if: github.event_name == 'push' && github.ref_name == 'main'
-    uses: glenn20/python-ci/publish.yaml@main
+    uses: glenn20/python-ci/.github/workflows/publish.yaml@main
     needs: build
     with:
       package-name: ${{ needs.build.outputs.package-name }}
