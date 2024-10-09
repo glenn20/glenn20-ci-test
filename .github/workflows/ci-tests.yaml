@@ -8,25 +8,12 @@ on:
     outputs:
       package-name:
         description: 'Name of the package'
-        value: ${{ jobs.build.outputs.package-name }}
+        value: ${{ jobs.ci.outputs.package-name }}
 
 jobs:
-  test:
-    name: Tests
-    uses: ./.github/workflows/_test.yaml
-
-  build:  # Only build on main branch
-    name: Build package
-    if: github.event_name == 'push' && github.ref_name == 'main'
-    uses: ./.github/workflows/_build.yaml
-
-  publish-test:
-    name: Publish to test.pypi
-    if: github.event_name == 'push' && github.ref_name == 'main'
-    uses: ./.github/workflows/_publish.yaml
-    needs: build
+  ci:
+    name: Test and Build
+    uses: ./.github/workflows/_test_ci.yaml
     with:
-      package-name: ${{ needs.build.outputs.package-name }}
-      pypi: test.pypi
-    permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      os: '["ubuntu-latest", "windows-latest"]'
+      python-version: '["3.8", "3.12"]'
