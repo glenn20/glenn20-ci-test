@@ -13,27 +13,31 @@ on:
         default: '["3.9", "3.10", "3.11", "3.12", "3.13"]'
         type: string
         required: false
+      build:
+        description: 'Build package'
+        default: true
+        required: false
+        type: boolean
     outputs:
       package-name:
         description: 'Name of the package'
         value: ${{ jobs.build.outputs.package-name }}
 
 jobs:
-  # check:
-  #   name: Code checks
-  #   uses: ./.github/workflows/_check.yaml
+  check:
+    name: Code checks
+    uses: ./.github/workflows/_check.yaml
 
-  # test:
-  #   name: Tests
-  #   uses: ./.github/workflows/_test.yaml
-  #   with:
-  #     os: ${{ inputs.os }}
-  #     python-version: ${{ inputs.python-version }}
+  test:
+    name: Tests
+    uses: ./.github/workflows/_test.yaml
+    with:
+      os: ${{ inputs.os }}
+      python-version: ${{ inputs.python-version }}
 
   build:
     name: Build package
-    # if: github.event_name == 'push' && github.ref_name == 'main'
-    uses: ./.github/workflows/_build.yaml
+    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
 
   publish-test:
     name: Publish to test.pypi
