@@ -16,7 +16,6 @@ jobs:
 
   publish-test:
     name: Publish to test.pypi
-    needs: ci-tests
     uses: ./.github/workflows/_publish.yaml
     with:
       pypi: test.pypi

@@ -13,9 +13,11 @@ jobs:
   build:
     name: Build package
     uses: glenn20/python-ci/.github/workflows/_build.yaml@main
+    permissions:
+      id-token: none
 
   publish:
-    name: Publish package to ${{ inputs.pypi }}
+    name: Publish to ${{ inputs.pypi }}
     needs: build
     runs-on: ubuntu-latest
 
