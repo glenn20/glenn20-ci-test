@@ -28,5 +28,4 @@ jobs:
       - name: Checkout code
         uses: glenn20/python-ci/publish@main
         with:
-          package-name: ${{ inputs.package-name }}
           pypi: ${{ inputs.pypi }}

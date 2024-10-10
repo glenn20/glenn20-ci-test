@@ -37,7 +37,7 @@ jobs:
 
   publish-test:
     name: Publish to test.pypi
-    uses: glenn20/python-ci/.github/workflows/publish.yaml@main
+    uses: ./.github/workflows/_publish.yaml
     needs: build
     with:
       package-name: ${{ needs.build.outputs.package-name }}
