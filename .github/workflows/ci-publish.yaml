@@ -15,25 +15,33 @@ jobs:
 
   publish-test:
     name: Publish to test.pypi
-    uses: glenn20/python-ci/.github/workflows/_publish.yaml@main
-    with:
-      pypi: test.pypi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: glenn20/python-ci/publish@main
+        with: { pypi: test.pypi }
+    environment:
+      name: publish-test.pypi
+      url: https://test.pypi.org/p/glenn20-python-ci
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!
 
   publish-pypi:
     name: Publish to pypi
-    uses: glenn20/python-ci/.github/workflows/_publish.yaml@main
-    needs: tests
-    with:
-      pypi: test.pypi
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: glenn20/python-ci/publish@main
+        with: { pypi: pypi }
+    environment:
+      name: publish-pypi
+      url: https://pypi.org/p/glenn20-python-ci
     permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      id-token: write  # IMPORTANT: mandatory for trusted publishing!
 
   github-release:
     name: Create GitHub release
     uses: glenn20/python-ci/.github/workflows/_release.yaml@main
-    needs: publish-pypi
+    needs: publish-test
     permissions:
       contents: write  # IMPORTANT: mandatory for github release
       id-token: write  # IMPORTANT: mandatory for github release
