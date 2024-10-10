@@ -30,14 +30,13 @@ jobs:
       os: ${{ inputs.os }}
       python-version: ${{ inputs.python-version }}
 
-  build:  # Only build on main branch
+  build:
     name: Build package
-    if: github.event_name == 'push' && github.ref_name == 'main'
+    # if: github.event_name == 'push' && github.ref_name == 'main'
     uses: ./.github/workflows/_build.yaml
 
   publish-test:
     name: Publish to test.pypi
-    if: github.event_name == 'push' && github.ref_name == 'main'
     uses: glenn20/python-ci/.github/workflows/publish.yaml@main
     needs: build
     with:
