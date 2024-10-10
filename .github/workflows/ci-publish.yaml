@@ -35,5 +35,5 @@ jobs:
     uses: glenn20/python-ci/.github/workflows/_release.yaml@main
     needs: publish-pypi
     permissions:
-      contents: write  # IMPORTANT: mandatory for trusted publishing
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      contents: write  # IMPORTANT: mandatory for github release
+      id-token: write  # IMPORTANT: mandatory for github release
