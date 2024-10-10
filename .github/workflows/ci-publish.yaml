@@ -19,7 +19,7 @@ jobs:
     with:
       pypi: test.pypi
     permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      id-token: write  # IMPORTANT: mandatory for trusted publishing!
 
   publish-pypi:
     name: Publish to pypi
