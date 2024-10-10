@@ -27,6 +27,10 @@ jobs:
     permissions:
       id-token: none
 
+  build:
+    name: Build package
+    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
+
   publish-test:
     name: Publish to test.pypi
     runs-on: ubuntu-latest
