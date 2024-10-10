@@ -13,7 +13,7 @@ on:
         required: false
       python-version:
         description: 'Python version'
-        default: '["3.9", "3.12"]'
+        default: '["3.9", "3.11"]'
         type: string
         required: false
 
