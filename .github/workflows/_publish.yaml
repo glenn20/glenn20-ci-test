@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish:
-    name: Publish package to PyPI
+    name: Publish package to ${{ inputs.pypi }}
     runs-on: ubuntu-latest
 
     environment:
@@ -25,7 +25,7 @@ jobs:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
 
     steps:
-      - name: Checkout code
+      - name: Publish package
         uses: glenn20/python-ci/publish@main
         with:
           pypi: ${{ inputs.pypi }}
