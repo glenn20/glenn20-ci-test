@@ -5,18 +5,31 @@ on:
     branches: [main, dev]
   workflow_dispatch:
   workflow_call:
+    inputs:
+      os:
+        description: 'Operating system'
+        default: '["ubuntu-latest"]'
+        type: string
+        required: false
+      python-version:
+        description: 'Python version'
+        default: '["3.9", "3.12"]'
+        type: string
+        required: false
 
 jobs:
-  ci-tests:
+  ci-test:
     name: CI tests
-    uses: ./.github/workflows/_ci_tests.yaml
+    uses: glenn20/python-ci/.github/workflows/_ci_tests.yaml@main
     with:
-      os: '["ubuntu-latest"]'
-      python-version: '["3.8", "3.12"]'
+      os: ${{ inputs.os }}
+      python-version: ${{ inputs.python-version }}
+    permissions:
+      id-token: none
 
   publish-test:
     name: Publish to test.pypi
-    uses: ./.github/workflows/_publish.yaml
+    uses: glenn20/python-ci/.github/workflows/_publish.yaml@main
     with:
       pypi: test.pypi
     permissions:
