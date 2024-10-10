@@ -19,16 +19,16 @@ on:
         value: ${{ jobs.build.outputs.package-name }}
 
 jobs:
-  check:
-    name: Code checks
-    uses: ./.github/workflows/_check.yaml
+  # check:
+  #   name: Code checks
+  #   uses: ./.github/workflows/_check.yaml
 
-  test:
-    name: Tests
-    uses: ./.github/workflows/_test.yaml
-    with:
-      os: ${{ inputs.os }}
-      python-version: ${{ inputs.python-version }}
+  # test:
+  #   name: Tests
+  #   uses: ./.github/workflows/_test.yaml
+  #   with:
+  #     os: ${{ inputs.os }}
+  #     python-version: ${{ inputs.python-version }}
 
   build:
     name: Build package

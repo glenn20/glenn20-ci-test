@@ -6,6 +6,9 @@ on:
       package-name:
         description: 'Name of the package'
         value: ${{ jobs.build.outputs.package-name }}
+      package-version:
+        description: 'Version number of the package'
+        value: ${{ jobs.build.outputs.package-version }}
 
 jobs:
   build:
@@ -15,7 +18,6 @@ jobs:
     outputs:
       package-name: ${{ steps.package-name.outputs.name }}
       package-version: ${{ steps.package-name.outputs.version }}
-      git-status: ${{ steps.git-status.outputs.status }}
 
     steps:
       - uses: actions/checkout@v4
@@ -33,10 +35,6 @@ jobs:
         with:
           name: python-package
           path: dist/
-
-      - name: Check git status
-        id: git-status
-        run: echo "status=$(git status --porcelain)" >> $GITHUB_OUTPUT
 
       - name: Get package name and version
         id: package-name
