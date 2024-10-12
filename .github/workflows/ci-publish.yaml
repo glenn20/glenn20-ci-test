@@ -13,32 +13,20 @@ jobs:
       os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
       python-version: '["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]'
 
-  build:
-    name: Build package
-    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
-
   publish-test:
     name: Publish to test.pypi
-    runs-on: ubuntu-latest
-    steps:
-      - uses: glenn20/python-ci/publish@main
-        with: { pypi: test.pypi }
-    environment:
-      name: publish-test.pypi
-      url: https://test.pypi.org/p/glenn20-python-ci
+    uses: ./.github/workflows/publish.yaml
+    with:
+      pypi: test.pypi
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!
 
   publish-pypi:
     name: Publish to pypi
     if: false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: glenn20/python-ci/publish@main
-        with: { pypi: pypi }
-    environment:
-      name: publish-pypi
-      url: https://pypi.org/p/glenn20-python-ci
+    uses: ./.github/workflows/publish.yaml
+    with:
+      pypi: test.pypi
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!
 

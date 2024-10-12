@@ -4,41 +4,22 @@ on:
   push:
     branches: [main, dev]
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      os:
-        description: 'Operating system'
-        default: '["ubuntu-latest"]'
-        type: string
-        required: false
-      python-version:
-        description: 'Python version'
-        default: '["3.9", "3.11"]'
-        type: string
-        required: false
 
 jobs:
-  ci-test:
+  ci-tests:
     name: CI tests
     uses: glenn20/python-ci/.github/workflows/_ci_tests.yaml@main
     with:
-      os: ${{ inputs.os }}
-      python-version: ${{ inputs.python-version }}
+      os: '["ubuntu-latest"]'
+      python-version: '["3.9", "3.11"]'
     permissions:
       id-token: none
 
-  build:
-    name: Build package
-    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
-
   publish-test:
     name: Publish to test.pypi
-    runs-on: ubuntu-latest
-    steps:
-      - uses: glenn20/python-ci/publish@main
-        with: { pypi: test.pypi }
-    environment:
-      name: publish-test.pypi
-      url: https://test.pypi.org/p/glenn20-python-ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/publish.yaml
+    with:
+      pypi: test.pypi
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing!

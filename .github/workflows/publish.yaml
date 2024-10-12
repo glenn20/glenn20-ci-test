@@ -1,0 +1,43 @@
+name: Publish
+# description: |-
+#   A github reusable workflow to publish a python package to pypi.org or
+#   test.pypi.org. Input options:
+#   - `pypi: test.pypi`: Publish to test.pypi.org (default).
+#   - `pypi: pypi`: Publish to pypi.org.
+#   The workflow invokes the github action `glenn20/python-ci/publish@v1` to
+#   publish the package.
+#   Assumes two Environments have been defined in the project github
+#   repository: `publish-test.pypi` and `publish-pypi`.
+#   Invoke with `uses: glenn20/python-ci/publish@v1`
+
+on:
+  workflow_call:
+    inputs:
+      pypi:
+        description: 'Set to "pypi" or "test.pypi" (default).'
+        default: 'test.pypi'
+        required: false
+        type: string
+
+jobs:
+  build:
+    name: Build package
+    uses: glenn20/python-ci/.github/workflows/_build.yaml@main
+    permissions:
+      id-token: none
+
+  publish:
+    name: Publish to ${{ inputs.pypi }}
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: publish-${{ inputs.pypi }}
+      url: https://${{ inputs.pypi }}.org/p/${{ needs.build.outputs.package-name }}
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+
+    steps:
+      - uses: glenn20/python-ci/publish@main
+        with:
+          pypi: ${{ inputs.pypi }}
