@@ -1,5 +1,9 @@
 name: Test and Build
 
+# Run the code checks and CI pytest workflow on push to main or dev branches, or
+# manually triggered workflow_dispatch event. Build and publish to test.pypi on
+# push to main.
+
 on:
   push:
     branches: [main, dev]

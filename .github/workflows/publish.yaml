@@ -1,4 +1,9 @@
 name: Publish
+
+# For trusted publishing, the publishing workflow must be in the project
+# repository, so copy this workflow file to `.github/workflows/publish.yaml` in
+# your repository.
+
 # description: |-
 #   A github reusable workflow to publish a python package to pypi.org or
 #   test.pypi.org. Input options:
@@ -8,7 +13,7 @@ name: Publish
 #   publish the package.
 #   Assumes two Environments have been defined in the project github
 #   repository: `publish-test.pypi` and `publish-pypi`.
-#   Invoke with `uses: glenn20/python-ci/publish@v1`
+#   Invoke with `uses: ./.github/workflows/publish.yaml`
 
 on:
   workflow_call:
