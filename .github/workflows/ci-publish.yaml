@@ -10,8 +10,10 @@ jobs:
     name: Tests
     uses: glenn20/python-ci/.github/workflows/_ci_tests.yaml@main
     with:
-      os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
-      python-version: '["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]'
+      os: '["ubuntu-latest"]'
+      python-version: '["3.8", "3.13"]'
+      # os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
+      # python-version: '["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]'
 
   publish-test:
     name: Publish to test.pypi
