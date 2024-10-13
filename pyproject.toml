@@ -23,6 +23,7 @@ build.targets.wheel.packages = ["src/glenn20_ci_test"]
 build.hooks.vcs.version-file = "src/glenn20_ci_test/_version.py"
 version.source = "vcs"  # Get the version from git, eg: 0.0.6.dev0+g1234567
 version.raw-options.local_scheme = "no-local-version"
+version.tag-pattern = "^([vV]?\\d+(?:\\.\\d+){0,2}).*$"
 
 [tool.uv]
 dev-dependencies = [
