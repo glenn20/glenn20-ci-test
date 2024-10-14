@@ -22,8 +22,17 @@ hello = "glenn20_ci_test:hello"
 build.targets.wheel.packages = ["src/glenn20_ci_test"]
 build.hooks.vcs.version-file = "src/glenn20_ci_test/_version.py"
 version.source = "vcs"  # Get the version from git, eg: 0.0.6.dev0+g1234567
+# Drop the local version part (eg: +g1234567) or pypi will reject package
 version.raw-options.local_scheme = "no-local-version"
-version.tag-pattern = "^([vV]?\\d+(?:\\.\\d+){0,2}).*$"
+# A github release workflow may generate a new tag with .devN suffix. We
+# need to tell setuptools_scm to ignore past tags with .devN suffix when
+# calculating the version number else it refuses to bump the version number.
+version.raw-options.git_describe_command = [
+    "git", "describe", "--dirty", "--tags", "--long",
+    "--match", "v*.[0-9]",
+    "--match", "v*.[0-9][0-9]",
+    "--match", "v*.[0-9][0-9][0-9]",
+]
 
 [tool.uv]
 dev-dependencies = [
@@ -52,7 +61,6 @@ lint.extend-select = ["I"]  # Enable ruffs isort rules (for compat with vscode r
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
 addopts = ["--cov"]
 
 [tool.coverage]
@@ -60,3 +68,22 @@ run.source = ["src"]
 run.omit = ["_version.py"]
 report.skip_covered = true
 append = true
+
+[tool.tox]
+env_list = [
+    "clean", "mypy", "lint", "format",
+    "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"
+]
+requires = ["tox>=4.19", "tox-uv>=1.13"]
+env.clean.commands = [["coverage", "erase"]]
+env.clean.deps = ["coverage>=7.0"]
+env.clean.skip_install = true
+env.mypy.commands = [["mypy", "src"]]
+env.mypy.deps = ["mypy>=0.910"]
+env.lint.commands = [["ruff", "check", "src"]]
+env.lint.deps = ["ruff>=0.6.0"]
+env.format.commands = [["ruff", "format", "--check", "src"]]
+env.format.deps = ["ruff>=0.6.0"]
+env_run_base.commands = [["pytest"]]
+env_run_base.package = "editable"
+env_run_base.deps = ["pytest>=8.3.2", "pytest-cov>=3.0.0"]
