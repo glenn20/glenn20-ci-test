@@ -32,6 +32,12 @@ on:
         default: 'test.pypi'
         required: false
         type: string
+  workflow_dispatch:
+    inputs:
+      pypi:
+        description: 'Set to "upload.pypi" or "test.pypi" (default).'
+        options: ['test.pypi', 'upload.pypi']
+        type: choice
 
 jobs:
   publish:
