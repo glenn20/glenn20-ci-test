@@ -28,7 +28,7 @@ on:
   workflow_call:
     inputs:
       pypi:
-        description: 'Set to "upload.pypi" or "test.pypi" (default).'
+        description: 'Publish to `upload.pypi` or `test.pypi`:'
         default: 'test.pypi'
         required: false
         type: string
@@ -49,7 +49,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
-      - uses: glenn20/python-ci/publish@main
+      - uses: glenn20/python-ci/publish@v1
         id: publish
         with:
           pypi: ${{ inputs.pypi }}
