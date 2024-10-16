@@ -37,6 +37,7 @@ jobs:
 
   publish-pypi:
     name: Publish to pypi
+    if: false  # Disable for this test repo
     uses: ./.github/workflows/publish.yaml
     needs: tests
     with:
